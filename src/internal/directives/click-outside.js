@@ -2,18 +2,13 @@ const clickoutsideContext = '@@clickoutsideContext';
 
 export default {
   name: 'click-outside',
-  bind (el, binding, vnode) {
+  mounted(el, binding) {
     const documentHandler = function (e) {
-      if (!vnode.context || el.contains(e.target)) return;
-      if (binding.expression) {
-        vnode.context[el[clickoutsideContext].methodName](e);
-      } else {
-        el[clickoutsideContext].bindingFn(e);
-      }
+      if (!binding.instance || el.contains(e.target)) return;
+      binding.value(e);
     };
     el[clickoutsideContext] = {
       documentHandler,
-      methodName: binding.expression,
       bindingFn: binding.value
     };
     setTimeout(() => {
@@ -21,12 +16,11 @@ export default {
     }, 0);
   },
 
-  update (el, binding) {
-    el[clickoutsideContext].methodName = binding.expression;
+  updated(el, binding) {
     el[clickoutsideContext].bindingFn = binding.value;
   },
 
-  unbind (el) {
+  unmounted(el) {
     document.removeEventListener('click', el[clickoutsideContext].documentHandler);
   }
 };

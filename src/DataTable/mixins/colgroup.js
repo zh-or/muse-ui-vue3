@@ -1,3 +1,4 @@
+import { h } from 'vue';
 import resize from '../../internal/directives/resize';
 export default {
   props: {
@@ -37,13 +38,11 @@ export default {
       this.cols.forEach((width) => (tableWidth += Number(width)));
       this.tableWidth = tableWidth + 'px';
     },
-    createColGroup (h) {
+    createColGroup () {
       return h('colgroup', {
       }, this.cols.map((width) => {
         return h('col', {
-          attrs: {
-            width
-          }
+          width
         });
       }));
     }

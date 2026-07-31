@@ -1,6 +1,6 @@
 import { getScrollEventTarget } from '../../utils/dom';
 
-function bindScroll (el, binding) {
+function bindScroll(el, binding) {
   const callback = typeof binding.value === 'function'
     ? binding.value
     : binding.value.callback;
@@ -16,7 +16,7 @@ function bindScroll (el, binding) {
   const handleScroll = function (e) {
     callback(target, e);
   };
-  if (el._onScroll && target !== el._onScroll.target) unbind(el, binding);
+  if (el._onScroll && target !== el._onScroll.target) unbindFn(el);
 
   target.addEventListener('scroll', handleScroll, options);
 
@@ -27,14 +27,16 @@ function bindScroll (el, binding) {
   };
 }
 
-function unbind (el, binding) {
+function unbindFn(el) {
+  if (!el._onScroll) return;
   const { callback, options, target } = el._onScroll;
   if (!target) return;
   target.removeEventListener('scroll', callback, options);
 }
+
 export default {
   name: 'scroll',
-  inserted: bindScroll,
-  update: bindScroll,
-  unbind: unbind
+  mounted: bindScroll,
+  updated: bindScroll,
+  unmounted: unbindFn
 };

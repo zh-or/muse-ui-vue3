@@ -3,8 +3,8 @@ import theme from '../theme';
 import BadgeTheme from './theme';
 import Badge from './Badge';
 
-Badge.install = function (Vue) {
-  Vue.component(Badge.name, Badge);
+Badge.install = function (app) {
+  app.component(Badge.name, Badge);
 };
 
 theme.addCreateTheme(BadgeTheme);

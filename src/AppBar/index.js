@@ -4,8 +4,8 @@ import theme from '../theme';
 import AppBarTheme from './theme';
 import AppBar from './AppBar';
 
-AppBar.install = function (Vue) {
-  Vue.component(AppBar.name, AppBar);
+AppBar.install = function (app) {
+  app.component(AppBar.name, AppBar);
 };
 
 theme.addCreateTheme(AppBarTheme);

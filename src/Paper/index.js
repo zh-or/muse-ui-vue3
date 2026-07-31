@@ -4,8 +4,8 @@ import theme from '../theme';
 import PaperTheme from './theme';
 import Paper from './Paper';
 
-Paper.install = function (Vue) {
-  Vue.component(Paper.name, Paper);
+Paper.install = function (app) {
+  app.component(Paper.name, Paper);
 };
 
 theme.addCreateTheme(PaperTheme);

@@ -72,9 +72,9 @@ export function convertHexToRGB (color) {
   }
 
   const values = {
-    r:	parseInt(color.substr(1, 2), 16),
-    g:	parseInt(color.substr(3, 2), 16),
-    b:	parseInt(color.substr(5, 2), 16)
+    r: parseInt(color.substring(1, 3), 16),
+    g: parseInt(color.substring(3, 5), 16),
+    b: parseInt(color.substring(5, 7), 16)
   };
 
   return `rgb(${values.r}, ${values.g}, ${values.b})`;

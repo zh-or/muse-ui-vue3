@@ -3,8 +3,8 @@ import theme from '../theme';
 import ChipTheme from './theme';
 import Chip from './Chip';
 
-Chip.install = function (Vue) {
-  Vue.component(Chip.name, Chip);
+Chip.install = function (app) {
+  app.component(Chip.name, Chip);
 };
 
 theme.addCreateTheme(ChipTheme);

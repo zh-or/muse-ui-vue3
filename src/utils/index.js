@@ -1,26 +1,28 @@
+import { h } from 'vue';
 import * as colorsObj from '../theme/colors';
 
 const colors = Object.keys(colorsObj);
-export function getColor (color) {
+export function getColor(color) {
   if (!color || ['primary', 'secondary', 'success', 'warning', 'info', 'error'].indexOf(color) !== -1) return '';
   return colors.indexOf(color) !== -1 ? colorsObj[color] : color;
-};
+}
 
-export function isNotNull (val) {
+export function isNotNull(val) {
   return val !== undefined && val !== null;
 }
 
-export function isNull (val) {
+export function isNull(val) {
   return val === undefined || val === null;
 }
 
-export function getWidth (w) {
+export function getWidth(w) {
+  if (w === undefined || w === null) return '';
   let width = String(w);
-  if (width && width.indexOf('%') === -1 && width.indexOf('px') === -1) width += 'px';
+  if (width.indexOf('%') === -1 && width.indexOf('px') === -1) width += 'px';
   return width;
 }
 
-export function isPc () {
+export function isPc() {
   var uaInfo = typeof navigator !== 'undefined' ? navigator.userAgent : '';
   var agents = ['Android', 'iPhone', 'Windows Phone', 'iPad', 'iPod'];
   var flag = true;
@@ -33,25 +35,23 @@ export function isPc () {
   return flag;
 }
 
-export function retina () {
-  // 处理retina屏幕显示效果
+export function retina() {
   if (isPc()) return;
   var classNames = [];
-  const pixelRatio = typeof window !== undefined && window.devicePixelRatio || 1;
+  const pixelRatio = typeof window !== 'undefined' && window.devicePixelRatio || 1;
   classNames.push('pixel-ratio-' + Math.floor(pixelRatio));
   if (pixelRatio >= 2) {
     classNames.push('retina');
   }
 
   const html = document.getElementsByTagName('html')[0];
-
   classNames.forEach((className) => html.classList.add(className));
 }
 
 /**
  * 将 String, Object, Array 转成 Array
  */
-export function convertClass (classes) {
+export function convertClass(classes) {
   let newClasses = [];
   if (!classes) return newClasses;
   if (classes instanceof Array) {
@@ -66,42 +66,40 @@ export function convertClass (classes) {
   return newClasses;
 }
 
-export function createSimpleFunctional (c, el = 'div', name) {
+export function createSimpleFunctional(c, el = 'div', name) {
   return {
     name,
-    functional: true,
-
-    render: (h, { data, children }) => {
-      data.staticClass = (`${c} ${data.staticClass || ''}`).trim();
-
-      return h(el, data, children);
+    setup(props, { slots }) {
+      return () => h(el, {
+        class: `${c}`
+      }, slots.default ? slots.default() : []);
     }
   };
 }
 
-export function getFirstComponentChild (children) {
-  return children && children.filter(c => c && c.tag)[0];
-};
+export function getFirstComponentChild(children) {
+  return children && children.filter(c => c && c.type)[0];
+}
 
-export function isPromise (val) {
+export function isPromise(val) {
   return val && typeof val.then === 'function';
 }
 
-export function isObject (val) {
+export function isObject(val) {
   return val !== null && val && typeof val === 'object' && !Array.isArray(val);
 }
 
-export function getObjAttr (obj, attrs) {
+export function getObjAttr(obj, attrs) {
   if (!obj || !attrs) return;
   let value = obj;
-  attrs.split('.').forEach((key, index) => {
+  attrs.split('.').forEach((key) => {
     if (!value) return;
     value = value[key];
   });
   return value;
 }
 
-export function setObjAttr (obj, attrs, value) {
+export function setObjAttr(obj, attrs, value) {
   attrs.split('.').forEach((key, index) => {
     if (attrs.length - index <= 1) {
       obj[key] = value;

@@ -1,7 +1,7 @@
 import '../styles/components/text-field.less';
 import theme from '../theme';
 import TextFieldTheme from './theme';
-import TextField from './TextField';
+import TextField from './TextField.vue';
 
 TextField.install = function (Vue) {
   Vue.component(TextField.name, TextField);

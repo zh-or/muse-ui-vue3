@@ -1,6 +1,6 @@
 import Drag from '../../utils/drag';
 
-function inserted (el, { value, modifiers }) {
+function mounted(el, { value, modifiers }) {
   const drag = new Drag(el, modifiers.touch);
   el._drag = drag;
   drag.start((pos, e) => {
@@ -24,13 +24,14 @@ function inserted (el, { value, modifiers }) {
     }
   });
 }
-function unbind (el) {
+
+function unmounted(el) {
   if (el._drag) el._drag.destory();
   el._drag = null;
 }
 
 export default {
   name: 'swipe',
-  inserted,
-  unbind
+  mounted,
+  unmounted
 };

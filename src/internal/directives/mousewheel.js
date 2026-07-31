@@ -17,7 +17,8 @@ const mousewheel = function (element, callback) {
 };
 
 export default {
-  bind (el, binding) {
+  name: 'mousewheel',
+  mounted(el, binding) {
     mousewheel(el, binding.value);
   }
 };

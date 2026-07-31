@@ -11,16 +11,27 @@
   background-color: currentColor;
   background-clip: padding-box;
   opacity: 0.1;
+  animation: mu-ripple-enter 450ms @easeOutFunction both;
+}
+
+@keyframes mu-ripple-enter {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 .mu-ripple-enter-active, .mu-ripple-leave-active{
   transition: opacity 2s @easeOutFunction, transform .45s @easeOutFunction;
 }
 
-.mu-ripple-enter {
+.mu-ripple-enter-from {
   transform: scale(0);
 }
 
 .mu-ripple-leave-active{
-  opacity: 0 !important;
+  opacity: 0;
+  transition: opacity 450ms @easeOutFunction;
 }

@@ -1,21 +1,12 @@
+import { h, Transition } from 'vue';
 import '../styles/transitions.less';
 export { default as ExpandTransition } from './ExpandTransition';
 
-function createTransition (name, mode) {
+function createTransition(name, mode) {
   return {
     name,
-    functional: true,
-    render (h, context) {
-      context.data = context.data || {};
-      context.data.props = { name };
-      context.data.on = context.data.on || {};
-      if (!Object.isExtensible(context.data.on)) {
-        context.data.on = { ...context.data.on };
-      }
-
-      if (mode) context.data.props.mode = mode;
-
-      return h('transition', context.data, context.children);
+    setup(props, { slots }) {
+      return () => h(Transition, { name, mode }, slots.default);
     }
   };
 }

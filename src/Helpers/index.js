@@ -1,3 +1,4 @@
+import { h } from 'vue';
 import TouchRipple from '../internal/TouchRipple';
 import {
   ExpandTransition,
@@ -14,8 +15,8 @@ import scroll from '../internal/directives/scroll';
 import elevation from '../internal/directives/elevation';
 
 export default {
-  install (Vue) {
-    Vue.component('mu-ripple', TouchRipple);
+  install(app) {
+    app.component('mu-ripple', TouchRipple);
     [
       ExpandTransition,
       FadeTransition,
@@ -24,10 +25,10 @@ export default {
       SlideLeftTransition,
       SlideRightTransition,
       ScaleTransition
-    ].forEach(transition => Vue.component(transition.name, transition));
-    Vue.directive(clickOutside.name, clickOutside);
-    Vue.directive(resize.name, resize);
-    Vue.directive(scroll.name, scroll);
-    Vue.directive(elevation.name, elevation);
+    ].forEach(transition => app.component(transition.name, transition));
+    app.directive(clickOutside.name, clickOutside);
+    app.directive(resize.name, resize);
+    app.directive(scroll.name, scroll);
+    app.directive(elevation.name, elevation);
   }
 };

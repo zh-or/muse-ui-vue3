@@ -8,9 +8,9 @@ import DateTimePicker from './DateTimePicker';
 theme.addCreateTheme(PickerTheme);
 export { DatePicker, TimePicker, DateTimePicker };
 export default {
-  install (Vue) {
-    Vue.component(DatePicker.name, DatePicker);
-    Vue.component(TimePicker.name, TimePicker);
-    Vue.component(DateTimePicker.name, DateTimePicker);
+  install (app) {
+    app.component(DatePicker.name, DatePicker);
+    app.component(TimePicker.name, TimePicker);
+    app.component(DateTimePicker.name, DateTimePicker);
   }
 };

@@ -164,4 +164,3 @@ export function monthDiff (d1, d2) {
 export function yearDiff (d1, d2) {
   return ~~(monthDiff(d1, d2) / 12);
 }
-

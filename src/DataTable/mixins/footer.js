@@ -1,18 +1,19 @@
+import { h } from 'vue';
 export default {
   methods: {
-    createFooter (h) {
-      return this.$scopedSlots.footer ? h('div', {
-        staticClass: 'mu-table-footer-wrapper',
+    createFooter () {
+      return this.$slots.footer ? h('div', {
+        class: 'mu-table-footer-wrapper',
         ref: 'footer'
       }, [
         h('table', {
-          staticClass: 'mu-table-footer',
+          class: 'mu-table-footer',
           style: {
             width: this.tableWidth
           }
         }, [
-          this.createColGroup(h),
-          h('tbody', {}, this.$scopedSlots.footer({
+          this.createColGroup(),
+          h('tbody', {}, this.$slots.footer({
             columns: this.columns
           }))
         ])

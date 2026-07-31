@@ -1,6 +1,6 @@
 export default {
   name: 'resize',
-  inserted (el, binding) {
+  mounted(el, binding) {
     let cb = binding.value;
     let debounce = 200;
     let callOnLoad = true;
@@ -22,7 +22,7 @@ export default {
 
     callOnLoad && onResize();
   },
-  unbind (el, binding) {
+  unmounted(el) {
     window.removeEventListener('resize', el._onResize);
   }
 };

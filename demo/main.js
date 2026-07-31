@@ -1,10 +1,7 @@
-
-import {createApp} from 'vue';
-import MuseUI from '../src';
+import { createApp } from 'vue';
+import MuseUI from '../src/index';
 import App from './App.vue';
 
-Vue.use(MuseUI);
-
-const app = new createApp(App);
-
-app.$mount('#app');
+const app = createApp(App);
+app.use(MuseUI);
+app.mount('#app');

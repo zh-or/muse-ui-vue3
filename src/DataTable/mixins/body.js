@@ -1,3 +1,4 @@
+import { h } from 'vue';
 import Checkbox from '../../Checkbox';
 import { ExpandTransition } from '../../internal/transitions';
 
@@ -46,42 +47,36 @@ export default {
     toggleExpand (index) {
       this.expandIndex = this.expandIndex === index ? -1 : index;
     },
-    createEmpty (h) {
+    createEmpty () {
       return [
         this.$slots.empty
-          ? this.$slots.empty
-          : h('div', { staticClass: 'mu-table-empty' }, this.noDataText)
+          ? this.$slots.empty()
+          : h('div', { class: 'mu-table-empty' }, this.noDataText)
       ];
     },
     createSlotContent (row, index) {
-      return this.$scopedSlots.default({
+      return this.$slots.default({
         row,
         $index: index
       });
     },
-    createCheckboxTd (h, index) {
+    createCheckboxTd (index) {
       return h('td', {
-        staticClass: 'mu-checkbox-col'
+        class: 'mu-checkbox-col'
       }, [
         h(Checkbox, {
-          props: {
-            inputValue: this.isSelected(index),
-            disabled: !this.selectable
-          },
-          on: {
-            change: () => this.toggleSelect(index),
-            click: (e) => {
-              e.stopPropagation();
-            }
+          modelValue: this.isSelected(index),
+          disabled: !this.selectable,
+          onChange: () => this.toggleSelect(index), onClick: (e) => {
           }
         })
       ]);
     },
-    createContent (h) {
+    createContent () {
       const contents = [];
       for (let index = 0; index < this.data.length; index++) {
         const row = this.data[index];
-        const arr = this.$scopedSlots.default
+        const arr = this.$slots.default
           ? this.createSlotContent(row, index)
           : this.columns.map((column) => {
             const text = column.formatter && typeof column.formatter === 'function'
@@ -93,55 +88,50 @@ export default {
               ]
             }, text);
           }) || [];
-        if (this.checkbox) arr.unshift(this.createCheckboxTd(h, index));
+        if (this.checkbox) arr.unshift(this.createCheckboxTd (index));
 
         const rowClassName = typeof this.rowClassName === 'function' ? this.rowClassName(index, row) : this.rowClassName;
         contents.push(
           h('tr', {
-            staticClass: rowClassName,
-            class: {
+            class: [rowClassName, {
               'is-hover': this.hover && this.hoverIndex === index,
               'is-stripe': this.stripe && index % 2 !== 0,
               'is-selected': this.isSelected(index)
-            },
+            }],
             style: typeof this.rowStyle === 'function' ? this.rowStyle(index, row) : this.rowStyle,
-            on: {
-              mouseenter: (e) => {
-                this.hoverIndex = index;
-                this.$emit('row-mouseenter', index, row, e);
-              },
-              mouseleave: (e) => {
-                this.hoverIndex = -1;
-                this.$emit('row-mouseleave', index, row, e);
-              },
-              contextmenu: (e) => {
-                this.$emit('row-contextmenu', index, row, e);
-              },
-              click: (e) => {
-                if (!this.checkbox) this.toggleSelect(index);
-                if (this.autoExpand) this.toggleExpand(index);
-                this.$emit('row-click', index, row, e);
-              },
-              dblclick: (e) => this.$emit('row-dblclick', index, row, e)
+            onMouseenter: (e) => {
+              this.hoverIndex = index;
+              this.$emit('row-mouseenter', index, row, e);
             },
-            key: row[this.rowKey]
+            onMouseleave: (e) => {
+              this.hoverIndex = -1;
+              this.$emit('row-mouseleave', index, row, e);
+            },
+            onContextmenu: (e) => {
+              this.$emit('row-contextmenu', index, row, e);
+            },
+            onClick: (e) => {
+              if (!this.checkbox) this.toggleSelect(index);
+              if (this.autoExpand) this.toggleExpand(index);
+              this.$emit('row-click', index, row, e);
+            },
+            onDblclick: (e) => this.$emit('row-dblclick', index, row, e),
+            key: row[this.rowKey],
           }, arr)
         );
 
-        if (this.$scopedSlots.expand) {
+        if (this.$slots.expand) {
           contents.push(
             h('tr', {
-              staticClass: 'mu-table-expand-row'
+              class: 'mu-table-expand-row'
             }, [
               h('td', {
-                attrs: {
-                  colspan: this.columns.length + (this.checkbox ? 1 : 0)
-                },
+                colspan: this.columns.length + (this.checkbox ? 1 : 0),
                 class: {
                   'is-expand': this.expandIndex === index
                 }
               }, this.expandIndex === index ? [
-                h(ExpandTransition, {}, this.$scopedSlots.expand({
+                h(ExpandTransition, {}, () => this.$slots.expand({
                   row,
                   $index: index
                 }))
@@ -152,24 +142,22 @@ export default {
       }
       return contents;
     },
-    createBody (h) {
+    createBody () {
       return this.data && this.data.length > 0 ? h('div', {
-        staticClass: 'mu-table-body-wrapper',
-        on: {
-          scroll: this.handleScroll
-        },
+        class: 'mu-table-body-wrapper',
+        onScroll: this.handleScroll,
         ref: 'body'
       }, [
         h('table', {
-          staticClass: 'mu-table-body',
+          class: 'mu-table-body',
           style: {
             width: this.tableWidth
           }
         }, [
-          this.createColGroup(h),
-          h('tbody', {}, this.createContent(h))
+          this.createColGroup(),
+          h('tbody', {}, this.createContent())
         ])
-      ]) : this.createEmpty(h);
+      ]) : this.createEmpty();
     }
   },
   watch: {
