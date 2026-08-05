@@ -11,7 +11,7 @@
   >
     <slot>
       <ListAction v-if="isMultiple()">
-        <Checkbox :input-value="selected" color="secondary" :disabled="disabled" :tab-index="-1" />
+        <Checkbox :model-value="selected" color="secondary" :disabled="disabled" :tab-index="-1" />
       </ListAction>
       <ListItemContent>
         <ListItemTitle>{{ label }}</ListItemTitle>

@@ -70,6 +70,7 @@ const props = defineProps({
   disabled: Boolean,
   tabIndex: [Number, String],
   ...rippleProps,
+  color: String,
   modelValue: {}
 });
 

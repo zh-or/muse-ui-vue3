@@ -243,7 +243,7 @@
       <section class="demo-section">
         <h3 class="demo-title">Drawer</h3>
         <mu-button @click="drawerOpen2 = !drawerOpen2">Toggle Drawer</mu-button>
-        <mu-drawer v-model:open="drawerOpen2">
+        <mu-drawer v-model:open="drawerOpen2" :docked="false">
           <mu-list>
             <mu-sub-header>Menu</mu-sub-header>
             <mu-list-item title="Item 1" value="1" />
@@ -351,7 +351,7 @@
       <!-- 26. Menu -->
       <section class="demo-section">
         <h3 class="demo-title">Menu</h3>
-        <mu-menu :open="menuOpen" >
+        <mu-menu v-model:open="menuOpen">
           <mu-button @click="menuOpen = !menuOpen">Open Menu</mu-button>
           <template v-slot:content>
             <mu-list @itemClick="menuOpen = false">

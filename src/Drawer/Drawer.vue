@@ -58,9 +58,20 @@ function overlayClick() {
   close('overlay')
 }
 
+function escPress() {
+  if (props.docked) return
+  close('esc')
+}
+
+function resetZIndex() {
+  overlayZIndex.value = getZIndex()
+  zIndex.value = getZIndex()
+}
+
 function popupOpen() {
   popupInstance = {
     overlayClick,
+    escPress,
     overlayZIndex: overlayZIndex.value,
     overlay: !props.docked,
     overlayColor: '#000',

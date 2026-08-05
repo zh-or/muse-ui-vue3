@@ -107,7 +107,7 @@ const props = defineProps({
   multiLine: Boolean, maxLength: [String, Number]
 })
 
-const emit = defineEmits(['update:modelValue', 'change', 'blur'])
+const emit = defineEmits(['update:modelValue', 'change', 'focus', 'blur'])
 const attrs = useAttrs()
 const { getNormalColorClass, getColor } = useColor(props)
 const muFormItem = inject('muFormItem', null)
@@ -442,8 +442,16 @@ function blurEvents() {
 
 function focusInput() { inputRef.value?.focus() }
 
+function focus() {
+  activateInput()
+  openMenu()
+  emit('focus')
+  focusInput()
+}
+
 function handleSelectClick(e) {
   if (props.disabled || props.readonly || (autoComplete.value && e.target === inputRef.value)) return
+  if (popoverRef.value?.root?.contains(e.target)) return
   toggleMenu()
 }
 
@@ -453,7 +461,7 @@ function handleInputClick(e) {
     openMenu()
     return
   }
-  focusInput()
+  focus()
 }
 
 function handleInputFocus(e) {

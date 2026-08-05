@@ -1,15 +1,17 @@
 <template>
-  <div
-    v-if="open"
-    ref="rootRef"
-    :class="['mu-popover', transitionName]"
-    :style="{ 'z-index': zIndex }"
-    v-resize="setStyle"
-    v-scroll="{ target: trigger, callback: setStyle }"
-    v-click-outside="clickOutSideHandler"
-  >
-    <slot />
-  </div>
+  <transition name="mu-popover-transition">
+    <div
+      v-if="open"
+      ref="rootRef"
+      :class="['mu-popover', transitionName]"
+      :style="{ 'z-index': zIndex }"
+      v-resize="setStyle"
+      v-scroll="{ target: trigger, callback: setStyle }"
+      v-click-outside="clickOutSideHandler"
+    >
+      <slot />
+    </div>
+  </transition>
 </template>
 
 <script>

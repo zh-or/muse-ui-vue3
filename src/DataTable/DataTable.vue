@@ -10,7 +10,7 @@
             <slot v-if="$slots.header" name="header" :columns="columns" />
             <tr v-else>
               <th v-if="checkbox" class="mu-checkbox-col">
-                <Checkbox :input-value="isSelectAll" :disabled="!(selectable && selectAll)" @change="toggleSelectAll" />
+                <Checkbox :model-value="isSelectAll" :disabled="!(selectable && selectAll)" @change="toggleSelectAll" />
               </th>
               <th
                 v-for="column in columns"
@@ -61,13 +61,13 @@
                 :class="getRowClasses(index, row)"
                 :style="getRowStyle(index, row)"
                 @mouseenter="handleRowMouseEnter(index, row, $event)"
-                @mouseleave="handleRowMouseLeave"
+                @mouseleave="handleRowMouseLeave(index, row, $event)"
                 @contextmenu="handleRowContextMenu(index, row, $event)"
                 @click="handleRowClick(index, row, $event)"
                 @dblclick="(e) => emit('row-dblclick', index, row, e)"
               >
                 <td v-if="checkbox" class="mu-checkbox-col">
-                  <Checkbox :input-value="isSelected(index)" :disabled="!selectable" @change="toggleSelect(index)" @click.stop />
+                  <Checkbox :model-value="isSelected(index)" :disabled="!selectable" @change="toggleSelect(index)" @click.stop />
                 </td>
                 <template v-if="$slots.default">
                   <slot :row="row" :$index="index" />
@@ -296,8 +296,9 @@ function handleRowMouseEnter(index, row, e) {
   emit('row-mouseenter', index, row, e)
 }
 
-function handleRowMouseLeave() {
+function handleRowMouseLeave(index, row, e) {
   hoverIndex.value = -1
+  emit('row-mouseleave', index, row, e)
 }
 
 function handleRowContextMenu(index, row, e) {
