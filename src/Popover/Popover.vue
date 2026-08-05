@@ -22,16 +22,15 @@ export default { directives: { resize, scroll, clickOutside: clickOutSide } }
 </script>
 
 <script setup>
-import { ref, computed, onMounted, onUpdated, getCurrentInstance } from 'vue'
-import { usePopup, popupProps } from '../composables/usePopup'
+import { ref, computed, onMounted, onUpdated } from 'vue'
+import { usePopup, popupOpenProps } from '../composables/usePopup'
 
 defineOptions({ name: 'mu-popover', inheritAttrs: false })
 
 const SPACE = 8
 const emit = defineEmits(['update:open', 'close'])
-const instance = getCurrentInstance()
 const props = defineProps({
-  ...popupProps,
+  ...popupOpenProps,
   overlay: { default: false },
   appendBody: { type: Boolean, default: false },
   lazy: Boolean,
@@ -46,7 +45,7 @@ const props = defineProps({
 })
 
 const rootRef = ref(null)
-const { zIndex } = usePopup(props, { emit }, instance.proxy)
+const { zIndex } = usePopup(props, { emit }, rootRef)
 defineExpose({ root: rootRef })
 
 function getLeftPosition(width, react) {

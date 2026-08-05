@@ -1,7 +1,8 @@
 <template>
   <component :is="transitionComp">
     <div
-      v-if="open"
+      ref="rootRef"
+      v-if="isOpen"
       :class="['mu-snackbar', colorClass, textColorClass, snackbarPositionClass]"
       :style="{ 'z-index': zIndex, 'background-color': bgColor, 'color': textColor }"
     >
@@ -16,14 +17,14 @@
 </template>
 
 <script setup>
-import { computed, useSlots, getCurrentInstance } from 'vue'
+import { ref, computed, useSlots } from 'vue'
 import { usePopup, popupProps } from '../composables/usePopup'
 import { useColor } from '../composables/useColor'
 import { SlideTopTransition, SlideBottomTransition } from '../internal/transitions'
 
 defineOptions({ name: 'mu-snackbar' })
-const emit = defineEmits(['update:open'])
-const instance = getCurrentInstance()
+const emit = defineEmits(['update:modelValue', 'close'])
+const rootRef = ref(null)
 const props = defineProps({
   ...popupProps,
   overlay: { default: false },
@@ -37,7 +38,7 @@ const props = defineProps({
   }
 })
 const slots = useSlots()
-const { zIndex } = usePopup(props, { emit }, instance.proxy)
+const { zIndex, isOpen } = usePopup(props, { emit }, rootRef)
 const { getColorClass, getTextColorClass, getColor } = useColor(props)
 
 const colorClass = computed(() => getColorClass())

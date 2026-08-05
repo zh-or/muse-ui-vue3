@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, onMounted, watch } from 'vue'
+import { ref, inject, onMounted, watch } from 'vue'
 
 const props = defineProps({
   year: [String, Number],
@@ -13,10 +13,10 @@ const props = defineProps({
 })
 
 const el = ref(null)
-const instance = getCurrentInstance()
+const scrollToSelectedYear = inject('scrollToSelectedYear')
 
 function scrollParent() {
-  instance.proxy.$parent.scrollToSelectedYear(el.value)
+  scrollToSelectedYear(el.value)
 }
 
 onMounted(() => {

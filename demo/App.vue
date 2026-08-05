@@ -101,7 +101,7 @@
       <section class="demo-section">
         <h3 class="demo-title">BottomSheet</h3>
         <mu-button @click="bottomSheetOpen = true">Open BottomSheet</mu-button>
-        <mu-bottom-sheet :open="bottomSheetOpen" @update:open="bottomSheetOpen = $event">
+        <mu-bottom-sheet v-model="bottomSheetOpen">
           <mu-list @itemClick="bottomSheetOpen = false">
             <mu-sub-header>Choose an action</mu-sub-header>
             <mu-list-item button title="Share" value="share" />
@@ -196,6 +196,7 @@
         <mu-date-input type="date" v-model="dateVal" label="Date" />
         <mu-date-input type="time" v-model="timeVal" label="Time" />
         <mu-date-input type="dateTime" v-model="dateTimeVal" label="DateTime" />
+        <mu-date-input type="dateTime" v-model="dateTimeVal" label="DateTime"  container="bottomSheet"/>
         <mu-paper :z-depth="1">
           <mu-date-picker v-model="dateVal" />
         </mu-paper>
@@ -220,8 +221,7 @@
         <mu-button @click="dialogOpen = true">Open Dialog</mu-button>
         <mu-dialog
           title="Dialog Title"
-          :open="dialogOpen"
-          @update:open="dialogOpen = $event"
+          v-model="dialogOpen"
         >
           This is a dialog with some content.
           <template v-slot:actions>
@@ -445,9 +445,8 @@
         <h3 class="demo-title">Snackbar</h3>
         <mu-button @click="snackbarOpen = true">Show Snackbar</mu-button>
         <mu-snackbar
-          :open="snackbarOpen"
+          v-model="snackbarOpen"
           message="This is a snackbar message"
-          @update:open="snackbarOpen = $event"
         />
       </section>
 
@@ -586,7 +585,6 @@ export default {
   methods: {
     togglePopover() {
       this.popoverOpen = !this.popoverOpen;
-      console.log('tp:', this.popoverOpen);
       this.popoverTrigger = this.$refs.popoverAnchor.$el;
     },
     handleClick() {

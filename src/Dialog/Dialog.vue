@@ -1,7 +1,8 @@
 <template>
   <Transition name="mu-dialog-transition">
     <div
-      v-if="open"
+      ref="rootRef"
+      v-if="isOpen"
       class="mu-dialog-wrapper"
       :style="{ 'z-index': zIndex }"
       @click="handleWrapperClick"
@@ -37,7 +38,7 @@ export default { directives: { resize } }
 </script>
 
 <script setup>
-import { ref, computed, nextTick, watch, onMounted, onUpdated, getCurrentInstance } from 'vue'
+import { ref, computed, nextTick, watch, onMounted, onUpdated } from 'vue'
 import { usePopup, popupProps } from '../composables/usePopup'
 import { convertClass, getWidth } from '../utils'
 import { useSlots } from 'vue'
@@ -67,10 +68,10 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:open'])
+const emit = defineEmits(['update:modelValue', 'close'])
 const slots = useSlots()
-const instance = getCurrentInstance()
-const { overlayZIndex, zIndex, overlayClick, escPress } = usePopup(props, { emit }, instance.proxy)
+const rootRef = ref(null)
+const { overlayZIndex, zIndex, overlayClick, escPress, isOpen } = usePopup(props, { emit }, rootRef)
 
 const titleRef = ref(null)
 const elBodyRef = ref(null)
@@ -113,7 +114,7 @@ function handleWrapperClick(e) {
 
 onMounted(() => setMaxDialogContentHeight())
 onUpdated(() => nextTick(() => setMaxDialogContentHeight()))
-watch(() => props.open, (val) => {
+watch(isOpen, (val) => {
   if (!val) return
   nextTick(() => {
     setMaxDialogContentHeight()

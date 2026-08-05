@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, provide } from 'vue'
 import YearButton from './YearButton'
 
 const props = defineProps({
@@ -45,6 +45,8 @@ function scrollToSelectedYear(yearButtonNode) {
   const scrollYOffset = (yearButtonNode.offsetTop + yearButtonNodeHeight / 2) - containerHeight / 2
   setTimeout(() => (containerEl.scrollTop = scrollYOffset), 0)
 }
+
+provide('scrollToSelectedYear', scrollToSelectedYear)
 
 defineExpose({ scrollToSelectedYear })
 </script>

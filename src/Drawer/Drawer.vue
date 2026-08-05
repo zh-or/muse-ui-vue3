@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch, getCurrentInstance } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import PopupManager from '../internal/mixins/popup/manager'
 import { getZIndex } from '../internal/mixins/popup/utils'
 import { getWidth } from '../utils'
@@ -37,7 +37,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:open', 'close', 'show', 'hide'])
-const instance = getCurrentInstance()
 const rootEl = ref(null)
 const overlayZIndex = ref(getZIndex())
 const zIndex = ref(getZIndex())

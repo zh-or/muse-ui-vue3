@@ -1,13 +1,13 @@
 <template>
   <BottomSheetTransition>
-    <div v-if="open" class="mu-bottom-sheet" :style="{ 'z-index': zIndex }">
+    <div ref="rootRef" v-if="isOpen" class="mu-bottom-sheet" :style="{ 'z-index': zIndex }">
       <slot />
     </div>
   </BottomSheetTransition>
 </template>
 
 <script setup>
-import { getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 import { usePopup, popupProps } from '../composables/usePopup'
 import { BottomSheetTransition } from '../internal/transitions'
 
@@ -21,7 +21,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:open'])
-const instance = getCurrentInstance()
-const { zIndex } = usePopup(props, { emit }, instance.proxy)
+const emit = defineEmits(['update:modelValue', 'close'])
+const rootRef = ref(null)
+const { zIndex, isOpen } = usePopup(props, { emit }, rootRef)
 </script>

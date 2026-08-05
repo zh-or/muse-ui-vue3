@@ -5,7 +5,7 @@ test('Bottom Sheet', ({ mount }) => {
   it('should default view', async () => {
     const wrapper = mount(BottomSheet, {
       propsData: {
-        open: true
+        modelValue: true
       }
     });
     expect(wrapper.html()).toMatchSnapshot();

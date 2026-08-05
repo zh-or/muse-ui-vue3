@@ -1,5 +1,6 @@
 <template>
   <ListItem
+    ref="listItemRef"
     v-show="visible"
     :class="['mu-option', { 'is-selected': selected, 'is-disabled': disabled, 'is-focused': focused }]"
     :ripple="ripple"
@@ -21,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue'
 import { ListItem, ListItemContent, ListItemTitle, ListAction } from '../List'
 import Checkbox from '../Checkbox'
 
@@ -48,8 +49,9 @@ const focused = ref(false)
 
 const selected = computed(() => isOptionSelected(props.value))
 
-const instance = getCurrentInstance()
-defineExpose({ get root() { return instance.proxy.$el } })
+const listItemRef = ref(null)
+const getRoot = () => listItemRef.value?.$el
+defineExpose({ get root() { return getRoot() } })
 
 const option = {
   get visible() { return visible.value },
@@ -57,7 +59,7 @@ const option = {
   get focused() { return focused.value },
   set focused(v) { focused.value = v },
   get selected() { return selected.value },
-  get root() { return instance.proxy.$el },
+  get root() { return getRoot() },
   label: props.label,
   value: props.value,
   disabled: props.disabled,

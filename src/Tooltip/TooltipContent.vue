@@ -20,8 +20,8 @@ export default { directives: { resize, scroll } }
 </script>
 
 <script setup>
-import { ref, Transition, getCurrentInstance, onMounted, onUpdated } from 'vue'
-import { usePopup, popupProps } from '../composables/usePopup'
+import { ref, Transition, onMounted, onUpdated } from 'vue'
+import { usePopup, popupOpenProps } from '../composables/usePopup'
 
 defineOptions({
   directives: { resize, scroll }
@@ -29,7 +29,7 @@ defineOptions({
 
 const SPACE = 8
 const props = defineProps({
-  ...popupProps,
+  ...popupOpenProps,
   overlay: { default: false },
   escPressClose: { default: false },
   placement: {
@@ -43,9 +43,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['mouseenter', 'mouseleave'])
-const instance = getCurrentInstance()
-const { zIndex } = usePopup(props, { emit }, instance.proxy)
 const tooltipEl = ref(null)
+const { zIndex } = usePopup(props, { emit }, tooltipEl)
 
 function getLeftPosition(width, react) {
   switch (props.placement) {

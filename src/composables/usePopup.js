@@ -1,9 +1,12 @@
-import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import PopupManager from '../internal/mixins/popup/manager';
 import { getZIndex } from '../internal/mixins/popup/utils';
 
 export const popupProps = {
-  open: Boolean,
+  modelValue: {
+    type: Boolean,
+    default: undefined
+  },
   overlay: {
     type: Boolean,
     default: true
@@ -34,22 +37,35 @@ export const popupProps = {
   }
 };
 
-export function usePopup(props, { emit }, vm) {
+export const popupOpenProps = {
+  ...popupProps,
+  open: Boolean
+};
+
+export function usePopup(props, { emit }, rootRef) {
   const overlayZIndex = ref(getZIndex());
   const zIndex = ref(getZIndex());
   let appened = false;
   let popupInstance = null;
 
+  const isModelValue = computed(() => props.modelValue !== undefined);
+  const hasOpen = computed(() => 'open' in props);
+  const isOpen = computed(() => isModelValue.value ? props.modelValue : (hasOpen.value ? props.open : false));
+
+  const emitClose = (reason) => {
+    if (isModelValue.value) emit('update:modelValue', false);
+    if (hasOpen.value) emit('update:open', false);
+    emit('close', reason);
+  };
+
   const overlayClick = () => {
-    if (!props.overlay || !props.overlayClose || !props.open) return;
-    emit('update:open', false);
-    emit('close', 'overlay');
+    if (!props.overlay || !props.overlayClose || !isOpen.value) return;
+    emitClose('overlay');
   };
 
   const escPress = () => {
-    if (!props.escPressClose || !props.open) return;
-    emit('update:open', false);
-    emit('close', 'esc');
+    if (!props.escPressClose || !isOpen.value) return;
+    emitClose('esc');
   };
 
   const resetZIndex = () => {
@@ -57,20 +73,16 @@ export function usePopup(props, { emit }, vm) {
     zIndex.value = getZIndex();
   };
 
-  const popupEl = () => {
-    return vm.$el;
-  };
-
   const appendPopupElToBody = () => {
     if (!props.appendBody || appened) return;
     nextTick(() => {
-      document.body.appendChild(vm.$el);
+      document.body.appendChild(rootRef.value);
       appened = true;
     });
   };
 
   const popupOpen = () => {
-    popupInstance = { overlayClick, escPress, overlayZIndex: overlayZIndex.value, overlay: props.overlay, overlayColor: props.overlayColor, overlayOpacity: props.overlayOpacity, lockScroll: props.lockScroll, $el: vm.$el };
+    popupInstance = { overlayClick, escPress, overlayZIndex: overlayZIndex.value, overlay: props.overlay, overlayColor: props.overlayColor, overlayOpacity: props.overlayOpacity, lockScroll: props.lockScroll, $el: rootRef.value };
     PopupManager.open(popupInstance);
   };
 
@@ -82,7 +94,7 @@ export function usePopup(props, { emit }, vm) {
   };
 
   onMounted(() => {
-    if (props.open) {
+    if (isOpen.value) {
       popupOpen();
       appendPopupElToBody();
     }
@@ -91,12 +103,13 @@ export function usePopup(props, { emit }, vm) {
   onBeforeUnmount(() => {
     popupClose();
     if (props.appendBody) {
-      if (!vm.$el) return;
-      if (vm.$el.parentNode) vm.$el.parentNode.removeChild(vm.$el);
+      const el = rootRef.value;
+      if (!el) return;
+      if (el.parentNode) el.parentNode.removeChild(el);
     }
   });
 
-  watch(() => props.open, (val) => {
+  watch(isOpen, (val) => {
     if (val) {
       resetZIndex();
       popupOpen();
@@ -110,6 +123,7 @@ export function usePopup(props, { emit }, vm) {
     overlayZIndex,
     zIndex,
     overlayClick,
-    escPress
+    escPress,
+    isOpen
   };
 }
