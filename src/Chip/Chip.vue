@@ -26,7 +26,7 @@ const handleDelete = (e) => {
       'mu-chip',
       getColorClass(),
       getTextColorClass(),
-      { 'is-deletable': selected }
+      { 'is-deletable': props.delete }
     ]"
     tabindex="0"
     :style="{
@@ -36,7 +36,7 @@ const handleDelete = (e) => {
   >
     <slot />
     <svg
-      v-if="delete"
+      v-if="props.delete"
       class="mu-chip-delete-icon"
       viewBox="0 0 24 24"
       @click="handleDelete"

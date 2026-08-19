@@ -56,7 +56,7 @@
             <col v-for="(colWidth, i) in cols" :key="i" :width="colWidth" />
           </colgroup>
           <tbody>
-            <template v-for="(row, index) in data" :key="row[rowKey]">
+            <template v-for="(row, index) in data" :key="row[rowKey] ?? index">
               <tr
                 :class="getRowClasses(index, row)"
                 :style="getRowStyle(index, row)"
@@ -225,6 +225,7 @@ function toggleSelectAll(val) {
     }
   }
   emit('update:selects', selected)
+  emit('select-change', -1, selected)
 }
 
 function handleSortChange(column) {

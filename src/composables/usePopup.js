@@ -84,6 +84,9 @@ export function usePopup(props, { emit }, rootRef) {
   const popupOpen = () => {
     popupInstance = { overlayClick, escPress, overlayZIndex: overlayZIndex.value, overlay: props.overlay, overlayColor: props.overlayColor, overlayOpacity: props.overlayOpacity, lockScroll: props.lockScroll, $el: rootRef.value };
     PopupManager.open(popupInstance);
+    nextTick(() => {
+      if (popupInstance) popupInstance.$el = rootRef.value;
+    });
   };
 
   const popupClose = () => {

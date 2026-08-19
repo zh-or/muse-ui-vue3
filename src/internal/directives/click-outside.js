@@ -5,7 +5,7 @@ export default {
   mounted(el, binding) {
     const documentHandler = function (e) {
       if (!binding.instance || el.contains(e.target)) return;
-      binding.value(e);
+      el[clickoutsideContext].bindingFn(e);
     };
     el[clickoutsideContext] = {
       documentHandler,

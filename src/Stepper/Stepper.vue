@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { provide, ref, onUpdated, defineOptions } from 'vue'
+import { provide, ref, defineOptions } from 'vue'
 
 defineOptions({ name: 'mu-stepper' })
 
@@ -15,14 +15,19 @@ const props = defineProps({
   orientation: { type: String, default: 'horizontal', validator: (val) => ['horizontal', 'vertical'].indexOf(val) !== -1 }
 })
 
-const stepIndex = ref(0)
-provide('registerStep', () => stepIndex.value++)
+const steps = ref([])
+provide('registerStep', (step) => {
+  steps.value.push(step)
+  return () => {
+    const index = steps.value.indexOf(step)
+    if (index !== -1) steps.value.splice(index, 1)
+  }
+})
 
 provide('stepperState', {
   get activeStep() { return props.modelValue },
   get linear() { return props.linear },
-  get orientation() { return props.orientation }
+  get orientation() { return props.orientation },
+  get steps() { return steps.value }
 })
-
-onUpdated(() => { stepIndex.value = 0 })
 </script>

@@ -142,9 +142,10 @@ function toggle() {
     return;
   }
   if (checked.value) {
-    iv.splice(iv.indexOf(value), 1);
-    emit('update:modelValue', iv);
-    emit('change', iv);
+    const val = [...iv]
+    val.splice(val.indexOf(value), 1)
+    emit('update:modelValue', val)
+    emit('change', val)
   } else {
     const val = [...iv, value];
     emit('update:modelValue', val);

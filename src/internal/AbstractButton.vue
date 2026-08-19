@@ -156,7 +156,7 @@ const tagAttrs = computed(() => {
   return result
 })
 
-const routePropsObj = computed(() => props.to ? {
+const routePropsObj = computed(() => props.to && !props.disabled ? {
   to: props.to,
   tag: props.tag,
   activeClass: props.activeClass,
@@ -251,11 +251,14 @@ function handleBlur(event) {
 }
 
 function handleClick(event) {
-  if (!props.disabled) {
-    tabPressed = false
-    removeKeyboardFocus(event)
-    emit('click', event)
+  if (props.disabled) {
+    event.preventDefault()
+    event.stopPropagation()
+    return
   }
+  tabPressed = false
+  removeKeyboardFocus(event)
+  emit('click', event)
 }
 
 function handleMouseUp(event) {

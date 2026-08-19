@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import '../../../styles/components/overlay.less'
 
 defineOptions({ name: 'mu-overlay' })
@@ -27,13 +27,14 @@ const props = defineProps({
   zIndex: Number
 })
 
+const state = inject('overlayState', null)
 const show = ref(false)
 
 const overlayStyle = computed(() => ({
-  opacity: props.opacity,
-  'background-color': props.color,
+  opacity: state ? state.opacity : props.opacity,
+  'background-color': state ? state.color : props.color,
   position: props.fixed ? 'fixed' : '',
-  'z-index': props.zIndex
+  'z-index': state ? state.zIndex : props.zIndex
 }))
 
 function handleClick() {

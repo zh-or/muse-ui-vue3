@@ -9,8 +9,6 @@
     @blur="handleBlur"
     @keydown="handleKeydown"
     @touchstart="handleTouchStart"
-    @touchend="handleTouchEnd"
-    @touchcancel="handleTouchEnd"
     @mousedown="handleMouseDown"
     @mouseup="handleMouseUp"
     @mouseenter="handleMouseEnter"

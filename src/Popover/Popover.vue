@@ -1,7 +1,7 @@
 <template>
   <transition name="mu-popover-transition">
     <div
-      v-if="open"
+      v-if="isOpen"
       ref="rootRef"
       :class="['mu-popover', transitionName]"
       :style="{ 'z-index': zIndex }"
@@ -28,7 +28,7 @@ import { usePopup, popupOpenProps } from '../composables/usePopup'
 defineOptions({ name: 'mu-popover', inheritAttrs: false })
 
 const SPACE = 8
-const emit = defineEmits(['update:open', 'close'])
+const emit = defineEmits(['update:open', 'update:modelValue', 'close'])
 const props = defineProps({
   ...popupOpenProps,
   overlay: { default: false },
@@ -45,7 +45,7 @@ const props = defineProps({
 })
 
 const rootRef = ref(null)
-const { zIndex } = usePopup(props, { emit }, rootRef)
+const { zIndex, isOpen } = usePopup(props, { emit }, rootRef)
 defineExpose({ root: rootRef })
 
 function getLeftPosition(width, react) {
@@ -91,7 +91,7 @@ function getTopPosition(height, react) {
 }
 
 function setStyle() {
-  if (!props.open) return
+  if (!isOpen.value) return
   const el = rootRef.value
   const triggerEl = props.trigger
   if (!el || !triggerEl) return
@@ -101,7 +101,12 @@ function setStyle() {
   el.style.left = getLeftPosition(el.offsetWidth, react) + 'px'
 }
 
-function close(reason) { if (!props.open) return; emit('update:open', false); emit('close', reason) }
+function close(reason) {
+  if (!isOpen.value) return
+  if (props.modelValue !== undefined) emit('update:modelValue', false)
+  emit('update:open', false)
+  emit('close', reason)
+}
 
 function clickOutSideHandler(e) {
   if (props.trigger && props.trigger.contains(e.target)) return

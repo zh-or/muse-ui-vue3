@@ -76,13 +76,14 @@ function start(event, isRippleTouchGenerated) {
 }
 
 function end() {
-  if (ripples.value.length === 0) return
-  const ripple = ripples.value[0]
-  if (ripple.leaving) return
-  ripple.leaving = true
-  setTimeout(() => {
-    ripples.value.splice(0, 1)
-  }, 450)
+  const activeRipples = ripples.value.filter((ripple) => !ripple.leaving)
+  if (activeRipples.length === 0) return
+  activeRipples.forEach((ripple) => {
+    ripple.leaving = true
+    setTimeout(() => {
+      ripples.value = ripples.value.filter((item) => item !== ripple)
+    }, 450)
+  })
   stopListeningForScrollAbort()
 }
 

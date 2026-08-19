@@ -1,10 +1,12 @@
 <template>
-  <div ref="trigger" :class="['mu-menu', { 'mu-menu__open': open }]">
-    <div
-      class="mu-menu-activator"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
-    >
+  <div
+    ref="trigger"
+    class="mu-menu"
+    :class="{ 'mu-menu__open': open }"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
+    <div class="mu-menu-activator" @click="handleActivatorClick">
       <slot />
     </div>
     <Popover
@@ -16,8 +18,6 @@
       :space="space"
       :trigger="trigger"
       @close="handleClose"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
     >
       <slot name="content" />
     </Popover>
@@ -50,6 +50,13 @@ function setOpen(val) {
   if (props.open === val) return
   emit('update:open', val)
   emit(val ? 'open' : 'close')
+}
+
+function handleActivatorClick(event) {
+  if (props.openOnHover) return
+  const target = event.target
+  if (target && target.closest && target.closest('button, a[href], input, select, textarea, [role="button"], .mu-button')) return
+  setOpen(!props.open)
 }
 
 function handleMouseEnter() {

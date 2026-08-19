@@ -16,7 +16,7 @@ export function addMinutes (d, minutes) {
 
 export function addSeconds (d, seconds) {
   const newDate = clone(d);
-  newDate.setSeconds(d.getMinutes() + seconds);
+  newDate.setSeconds(d.getSeconds() + seconds);
   return newDate;
 }
 

@@ -21,7 +21,7 @@
     :append="append"
     :replace="replace"
     @click="handleClick"
-    @keydown="handleKeyboardFocus"
+    @keyboard-focus="handleKeyboardFocus"
     @hover="handleHover"
     @hover-exit="handleHoverExit"
   >

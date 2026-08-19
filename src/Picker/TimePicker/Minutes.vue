@@ -82,7 +82,7 @@ onMounted(() => {
 
 function isMousePressed(event) {
   if (typeof event.buttons === 'undefined') {
-    return event.nativeEvent.which
+    return event.which
   }
   return event.buttons
 }

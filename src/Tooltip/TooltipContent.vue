@@ -7,6 +7,8 @@
       class="mu-tooltip"
       :style="{ 'z-index': zIndex }"
       ref="tooltipEl"
+      @mouseenter="emit('mouseenter')"
+      @mouseleave="emit('mouseleave')"
     >
       <slot />
     </div>

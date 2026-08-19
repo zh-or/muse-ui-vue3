@@ -341,7 +341,7 @@ function changeSelectedIndex(code) {
 function resetSelectedIndex() { selectedIndex.value = -1 }
 
 function removeSelection(index) {
-  const value = [...props.modelValue]
+  const value = props.modelValue ? [...props.modelValue] : []
   value.splice(index, 1)
   emit('update:modelValue', value)
   emit('change', value)
@@ -467,6 +467,7 @@ function handleInputClick(e) {
 function handleInputFocus(e) {
   if (props.disabled || props.readonly || isFocused.value) return
   activateInput()
+  emit('focus')
   setTimeout(focusInput, 0)
 }
 

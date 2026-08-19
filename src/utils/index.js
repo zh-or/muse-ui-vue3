@@ -100,8 +100,9 @@ export function getObjAttr(obj, attrs) {
 }
 
 export function setObjAttr(obj, attrs, value) {
-  attrs.split('.').forEach((key, index) => {
-    if (attrs.length - index <= 1) {
+  const keys = attrs.split('.');
+  keys.forEach((key, index) => {
+    if (keys.length - index <= 1) {
       obj[key] = value;
       return;
     }

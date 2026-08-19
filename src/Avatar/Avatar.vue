@@ -34,5 +34,5 @@ const props = defineProps({
 const { getColorClass, getTextColorClass, getColor } = useColor(props)
 
 const sizeWidth = computed(() => getWidth(props.size))
-const fontSize = computed(() => props.size / 2 + 'px')
+const fontSize = computed(() => parseFloat(getWidth(props.size)) / 2 + 'px')
 </script>

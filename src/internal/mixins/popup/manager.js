@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, reactive } from 'vue';
 import keycode from 'keycode';
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import OverlayComp from './Overlay';
@@ -28,13 +28,17 @@ const PopupManager = {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    const overlayApp = createApp(OverlayComp, {
-      fixed: true,
+    const state = reactive({
       color: instance.overlayColor,
       opacity: instance.overlayOpacity,
-      zIndex: instance.overlayZIndex,
+      zIndex: instance.overlayZIndex
+    });
+
+    const overlayApp = createApp(OverlayComp, {
+      fixed: true,
       onClick: () => this.handleOverlayClick()
     });
+    overlayApp.provide('overlayState', state);
     const overlayInstance = overlayApp.mount(container);
     overlayInstance.open();
 
@@ -43,9 +47,7 @@ const PopupManager = {
       app: overlayApp,
       instance: overlayInstance,
       show: true,
-      color: instance.overlayColor,
-      opacity: instance.overlayOpacity,
-      zIndex: instance.overlayZIndex
+      state
     };
     this.overlayApp = overlayApp;
 
@@ -110,9 +112,9 @@ const PopupManager = {
     if (!instance) return this.closeOverlay();
 
     if (instance && instance.overlay) {
-      this.overlay.color = instance.overlayColor;
-      this.overlay.opacity = instance.overlayOpacity;
-      this.overlay.zIndex = instance.overlayZIndex;
+      this.overlay.state.color = instance.overlayColor;
+      this.overlay.state.opacity = instance.overlayOpacity;
+      this.overlay.state.zIndex = instance.overlayZIndex;
     }
   },
 

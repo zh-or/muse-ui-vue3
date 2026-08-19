@@ -8,7 +8,7 @@ export default {
     if (typeof binding.value !== 'function') {
       cb = binding.value.value;
       debounce = binding.value.debounce || debounce;
-      callOnLoad = binding.value.quiet !== null ? false : callOnLoad;
+      callOnLoad = binding.value.quiet ? false : callOnLoad;
     }
 
     let debounceTimeout = null;

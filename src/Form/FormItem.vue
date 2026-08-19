@@ -45,16 +45,16 @@ const props = defineProps({
 })
 
 const slots = useSlots()
-const muForm = inject('muForm')
+const muForm = inject('muForm', null)
 const focus = ref(false)
 const errorMessage = ref(props.errorText || '')
 const help = ref(null)
 const content = ref(null)
 
 const hasLabelSlot = computed(() => slots.label && slots.label().length > 0)
-const labelWidthStyle = computed(() => getWidth(props.labelWidth || muForm.labelWidth))
-const effectiveLabelPosition = computed(() => props.labelPosition || muForm.labelPosition)
-const fieldValue = computed(() => muForm.model && props.prop && muForm.model[props.prop])
+const labelWidthStyle = computed(() => getWidth(props.labelWidth || (muForm && muForm.labelWidth)))
+const effectiveLabelPosition = computed(() => props.labelPosition || (muForm && muForm.labelPosition))
+const fieldValue = computed(() => muForm && muForm.model && props.prop && muForm.model[props.prop])
 
 const itemClass = computed(() => [
   'mu-form-item',
@@ -108,7 +108,7 @@ function onFocus() { focus.value = true }
 
 function onBlur() {
   focus.value = false
-  if (muForm.autoValidate) validate()
+  if (muForm && muForm.autoValidate) validate()
 }
 
 function onLabelClick() {}
@@ -127,8 +127,8 @@ provide('muFormItem', muFormItemInterface)
 
 const thisRef = muFormItemInterface
 
-onMounted(() => { setHelpLeft(); muForm.addItem(thisRef) })
-onBeforeUnmount(() => muForm.removeItem(thisRef))
+onMounted(() => { setHelpLeft(); muForm && muForm.addItem(thisRef) })
+onBeforeUnmount(() => muForm && muForm.removeItem(thisRef))
 
 watch(() => props.errorText, (val) => { errorMessage.value = val })
 watch(() => props.rules, () => { if (errorMessage.value) validate() })

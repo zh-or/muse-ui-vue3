@@ -86,15 +86,23 @@ function startAutoNext() {
 
 function next() {
   const maxIndex = items.value.length - 1
+  if (maxIndex < 0) return
   let index = activeIndex.value + 1
-  if (index > maxIndex) index = 0
+  if (index > maxIndex) {
+    if (!props.cycle) return
+    index = 0
+  }
   activeIndex.value = index
   inverse.value = false
 }
 
 function prev() {
+  if (items.value.length === 0) return
   let index = activeIndex.value - 1
-  if (index < 0) index = items.value.length - 1
+  if (index < 0) {
+    if (!props.cycle) return
+    index = items.value.length - 1
+  }
   activeIndex.value = index
   inverse.value = true
 }

@@ -60,10 +60,10 @@ const option = {
   set focused(v) { focused.value = v },
   get selected() { return selected.value },
   get root() { return getRoot() },
-  label: props.label,
-  value: props.value,
-  disabled: props.disabled,
-  searchText: props.searchText
+  get label() { return props.label },
+  get value() { return props.value },
+  get disabled() { return props.disabled },
+  get searchText() { return props.searchText }
 }
 
 onMounted(() => addOption(option))
